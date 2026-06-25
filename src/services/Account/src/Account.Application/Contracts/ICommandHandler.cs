@@ -1,7 +1,7 @@
 using Account.SharedKernel.Common.Primitives;
 using MediatR;
 
-namespace Account.SharedKernel.Contracts;
+namespace Account.Application.Contracts;
 
 public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, Result>
     where TCommand : ICommand
