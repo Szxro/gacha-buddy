@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1A26C7AD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Account.Domain.UnitTests", "tests\Account.Domain.UnitTests\Account.Domain.UnitTests.csproj", "{3D7680CA-4CD8-4D6E-8165-0D41CBBCE870}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Account.SharedKernel", "src\Account.SharedKernel\Account.SharedKernel.csproj", "{0DAC1F21-2FF1-4683-A9D3-4AD5C8D09F41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,7 @@ Global
 		{EB4AAD9B-E841-47FF-B215-08A9406B8E0A} = {848810B1-E205-45DD-91D0-78177EC6596F}
 		{946C0782-DF26-4C38-B1B9-DC7E4F89C55B} = {848810B1-E205-45DD-91D0-78177EC6596F}
 		{3D7680CA-4CD8-4D6E-8165-0D41CBBCE870} = {1A26C7AD-E527-4858-A38A-23DACA0B3A24}
+		{0DAC1F21-2FF1-4683-A9D3-4AD5C8D09F41} = {848810B1-E205-45DD-91D0-78177EC6596F}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{24EB2AA9-7054-4E13-817F-E6046F603B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -47,5 +50,9 @@ Global
 		{3D7680CA-4CD8-4D6E-8165-0D41CBBCE870}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D7680CA-4CD8-4D6E-8165-0D41CBBCE870}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D7680CA-4CD8-4D6E-8165-0D41CBBCE870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DAC1F21-2FF1-4683-A9D3-4AD5C8D09F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DAC1F21-2FF1-4683-A9D3-4AD5C8D09F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DAC1F21-2FF1-4683-A9D3-4AD5C8D09F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DAC1F21-2FF1-4683-A9D3-4AD5C8D09F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
