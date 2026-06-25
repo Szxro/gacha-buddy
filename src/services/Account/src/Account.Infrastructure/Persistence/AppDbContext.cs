@@ -1,4 +1,6 @@
-﻿using Account.Domain.Entities;
+﻿using Account.Domain.Common;
+using Account.Domain.Entities;
+using Account.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Account.Infrastructure.Persistence;
@@ -17,6 +19,8 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        
+        modelBuilder.ApplyGlobalQueryFilter<AuditableEntity>(x => !x.IsDeleted);
         
         base.OnModelCreating(modelBuilder);
     }
