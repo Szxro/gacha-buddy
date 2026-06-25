@@ -1,7 +1,7 @@
 using Account.SharedKernel.Common.Primitives;
 using MediatR;
 
-namespace Account.Application.Contracts;
+namespace Account.Application.Common.Abstractions;
 
 public interface ICommand<TResponse> : IRequest<Result<TResponse>>, IBaseCommand { }
 
