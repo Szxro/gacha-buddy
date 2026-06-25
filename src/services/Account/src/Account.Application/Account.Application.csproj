@@ -8,6 +8,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Account.Domain\Account.Domain.csproj" />
+      <ProjectReference Include="..\Account.SharedKernel\Account.SharedKernel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" />
     </ItemGroup>
 
 </Project>
