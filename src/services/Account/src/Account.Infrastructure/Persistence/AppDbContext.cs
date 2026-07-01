@@ -1,6 +1,7 @@
 ﻿using Account.Domain.Common;
 using Account.Domain.Entities;
 using Account.Infrastructure.Extensions;
+using Account.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 
 namespace Account.Infrastructure.Persistence;
@@ -42,4 +43,6 @@ public class AppDbContext : DbContext
     public DbSet<RefreshToken> RefreshToken => Set<RefreshToken>();
 
     public DbSet<EmailCode> EmailCode => Set<EmailCode>();
+
+    public DbSet<OutboxMessage> OutboxMessage => Set<OutboxMessage>();
 }
