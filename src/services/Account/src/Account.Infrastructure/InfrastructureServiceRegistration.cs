@@ -27,7 +27,7 @@ public static class InfrastructureServiceRegistration
                 sqlOptions.CommandTimeout(databaseOptions.CommandTimeout);
                 
             })
-            .AddInterceptors(provider.GetRequiredService<DomainEventDispatcherInterceptor>())
+            .AddInterceptors(provider.GetRequiredService<OutboxMessageInterceptor>())
             .UseSnakeCaseNamingConvention();
 
             if (environment.IsDevelopment())

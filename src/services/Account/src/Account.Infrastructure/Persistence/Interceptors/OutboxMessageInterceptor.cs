@@ -1,7 +1,6 @@
 using System.Text.Json;
 using Account.Domain.Common;
 using Account.Domain.Contracts;
-using Account.Infrastructure.Channels;
 using Account.Infrastructure.Common.Attributes;
 using Account.Infrastructure.Common.Enums;
 using Account.Infrastructure.Outbox;
@@ -13,13 +12,6 @@ namespace Account.Infrastructure.Persistence.Interceptors;
 [Inject(ServiceKind.Interceptor)]
 public class OutboxMessageInterceptor : SaveChangesInterceptor
 {
-    private readonly DomainEventChannel _eventChannel;
-
-    public OutboxMessageInterceptor(DomainEventChannel eventChannel)
-    {
-        _eventChannel = eventChannel;
-    }
-
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,
