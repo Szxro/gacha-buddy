@@ -1,6 +1,7 @@
 using Account.Infrastructure.Extensions;
 using Account.Infrastructure.Options;
 using Account.Infrastructure.Persistence;
+using Account.Infrastructure.Persistence.Interceptors;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,9 @@ public static class InfrastructureServiceRegistration
             {
                 sqlOptions.CommandTimeout(databaseOptions.CommandTimeout);
                 
-            }).UseSnakeCaseNamingConvention();
+            })
+            .AddInterceptors(provider.GetRequiredService<OutboxMessageInterceptor>())
+            .UseSnakeCaseNamingConvention();
 
             if (environment.IsDevelopment())
             {
