@@ -22,7 +22,7 @@ public class ValidationExceptionHandler : IExceptionHandler
         
         ProblemDetails problemDetails = new ProblemDetails
         {
-            Title = "Validation.Error",
+            Title = "Validation Failed",
             Detail = "One or more validation errors occurred.",
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
             Status = StatusCodes.Status400BadRequest
