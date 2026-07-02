@@ -1,3 +1,4 @@
+using Account.Application;
 using Account.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,10 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Configuration.AddEnvironmentVariables();
     
     // Add services to the container.
-    builder.Services.AddInfrastructureLayer(builder.Environment);
+    builder.Services
+        .AddApplicationLayer()
+        .AddInfrastructureLayer(builder.Environment);
+    
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
