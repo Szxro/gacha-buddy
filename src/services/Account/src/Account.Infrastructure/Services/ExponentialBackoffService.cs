@@ -19,11 +19,17 @@ public class ExponentialBackoffService : IExponentialBackoffService
         _logger = logger;
     }
     
-    public async Task<T?> RetryWithBackoff<T>(Func<Task<T>> func, BackOffOptions? options = null, CancellationToken cancellationToken = default)
+    public async Task<T?> RetryWithBackoff<T>(
+        Func<Task<T>> func,
+        BackOffOptions? options = null,
+        Func<Exception?, Task>? onComplete = null,
+        CancellationToken cancellationToken = default)
     {
         (int maxRetries, int initialDelay, int maxDelay, int timeMultiple) = options ?? new BackOffOptions();
 
         int attempts = 0;
+        
+        Exception? lastException = null;
 
         while (attempts < maxRetries)
         {
@@ -38,32 +44,43 @@ public class ExponentialBackoffService : IExponentialBackoffService
 
                 return result;
 
-            } catch
+            }
+            catch (Exception ex)
             {
-                int delay = CalculateDelay(options ?? new BackOffOptions(maxRetries, initialDelay, maxDelay, timeMultiple), attempts);
+                int delay = CalculateDelay(
+                    options ?? new BackOffOptions(maxRetries, initialDelay, maxDelay, timeMultiple), attempts);
 
                 await Task.Delay(delay, cancellationToken);
 
                 attempts++;
 
                 _logger.LogError(
-                    "Operation failed after retry count {attempts}/{maxRetries} and {delay}ms.",                    
+                    "Operation failed after retry count {attempts}/{maxRetries} and {delay}ms.",
                     attempts,
                     maxRetries,
                     delay);
+
+                lastException = ex;
             }
         }
+        if (onComplete is not null) await onComplete(lastException);
 
         _logger.LogError("Max retries reached. Operation ultimately failed.");
 
         return default(T);
     }
 
-    public async Task RetryWithBackoff(Func<Task> func, BackOffOptions? options = null, CancellationToken cancellationToken = default)
+    public async Task RetryWithBackoff(
+        Func<Task> func,
+        BackOffOptions? options = null,
+        Func<Exception?, Task>? onComplete = null,
+        CancellationToken cancellationToken = default)
     {
         (int maxRetries, int initialDelay, int maxDelay, int timeMultiple) = options ?? new BackOffOptions();
 
         int attempts = 0;
+        
+        Exception? lastException = null;
 
         while (attempts < maxRetries)
         {
@@ -78,9 +95,10 @@ public class ExponentialBackoffService : IExponentialBackoffService
 
                 return;
             }
-            catch
+            catch(Exception ex)
             {
-                int delay = CalculateDelay(options ?? new BackOffOptions(maxRetries, initialDelay, maxDelay, timeMultiple), attempts);
+                int delay = CalculateDelay(
+                    options ?? new BackOffOptions(maxRetries, initialDelay, maxDelay, timeMultiple), attempts);
 
                 await Task.Delay(delay, cancellationToken);
 
@@ -91,9 +109,12 @@ public class ExponentialBackoffService : IExponentialBackoffService
                     attempts,
                     maxRetries,
                     delay);
+
+                lastException = ex;
             }
         }
-
+        if(onComplete is not null) await onComplete(lastException);
+        
         _logger.LogError("Max retries reached. Operation ultimately failed.");
     }
     

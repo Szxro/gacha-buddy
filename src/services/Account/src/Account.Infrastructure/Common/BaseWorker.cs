@@ -1,8 +1,11 @@
+using Account.Infrastructure.Common.Attributes;
+using Account.Infrastructure.Common.Enums;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Account.Infrastructure.Common;
 
+[Inject(ServiceKind.Worker)]
 public abstract class BaseWorker<TWorker> : BackgroundService
     where TWorker : class
 {
