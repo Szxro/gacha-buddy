@@ -18,6 +18,8 @@ public static class InfrastructureServiceRegistration
         
         services.AddValidatorsFromAssembly(typeof(InfrastructureServiceRegistration).Assembly);
         
+        services.AddHttpContextAccessor();
+        
         services.AddDbContext<AppDbContext>((provider, options) =>
         {
             DatabaseOptions databaseOptions = provider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
