@@ -2,7 +2,9 @@ using Account.Infrastructure.Extensions;
 using Account.Infrastructure.Options;
 using Account.Infrastructure.Persistence;
 using Account.Infrastructure.Persistence.Interceptors;
+using Account.Infrastructure.Persistence.Pipelines;
 using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +16,9 @@ public static class InfrastructureServiceRegistration
 {
     public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IHostEnvironment  environment)
     {
+        // Register the transaction pipeline in the di pool 
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionPipelineBehavior<,>));
+        
         services.RegisterServicesFromAssembly(typeof(InfrastructureServiceRegistration).Assembly);
         
         services.AddValidatorsFromAssembly(typeof(InfrastructureServiceRegistration).Assembly);
