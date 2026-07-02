@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Account.Infrastructure.Outbox;
 
-[Inject(serviceKind:ServiceKind.Worker)]
 public class OutboxProcessorWorker : BaseWorker<OutboxProcessorWorker>
 {
     // Get the expiration time or timeout from configuration?
