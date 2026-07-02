@@ -13,8 +13,9 @@ public static partial class InfrastructureExtensions
     public static IServiceCollection RegisterServicesFromAssembly(this IServiceCollection services, Assembly assembly)
     {
         IEnumerable<TypeInfo> types = assembly.DefinedTypes
-            .Where(x => x.GetCustomAttribute<InjectAttribute>() is not null && x is { IsInterface: false, IsAbstract: false, IsClass: true });
-
+            .Where(x => x.GetCustomAttribute<InjectAttribute>() is not null &&
+                        x is { IsInterface: false, IsAbstract: false, IsClass: true });
+        
         foreach (TypeInfo type in types)
         {
             InjectAttribute? attribute = type.GetCustomAttribute<InjectAttribute>();
@@ -33,7 +34,7 @@ public static partial class InfrastructureExtensions
                     break;
                 case ServiceKind.Interceptor:
                     // By default, the interceptors have an interface call ISaveChangesInterceptor
-                    services.AddSingleton(type);
+                    services.AddSingleton(type, type);
                     break;
                 case ServiceKind.Options:
                     services.ConfigureOptions(type);
