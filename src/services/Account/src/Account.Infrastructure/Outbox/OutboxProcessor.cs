@@ -18,15 +18,18 @@ public class OutboxProcessor : IOutboxProcessor
     private readonly AppDbContext _context;
     private readonly IEventDispatcher _eventDispatcher;
     private readonly IExponentialBackoffService _exponentialBackoffService;
+    private readonly IEventTypeResolver _eventTypeResolver;
 
     public OutboxProcessor(
         AppDbContext context,
         IEventDispatcher eventDispatcher,
-        IExponentialBackoffService exponentialBackoffService )
+        IExponentialBackoffService exponentialBackoffService,
+        IEventTypeResolver eventTypeResolver)
     {
         _context = context;
         _eventDispatcher = eventDispatcher;
         _exponentialBackoffService = exponentialBackoffService;
+        _eventTypeResolver = eventTypeResolver;
     }
 
     public async Task<int> ExecuteAsync(CancellationToken cancellationToken)
@@ -39,11 +42,15 @@ public class OutboxProcessor : IOutboxProcessor
         
         foreach (OutboxMessage message in messages)
         {
-            IDomainEvent? @event = JsonSerializer.Deserialize<IDomainEvent>(message.Payload);
+            Type? eventType = _eventTypeResolver.Resolve(message.Type);
+            
+            if(eventType is null) continue;
+            
+            object? @event = JsonSerializer.Deserialize(message.Payload, eventType);
             
             try
             {
-                await _eventDispatcher.DispatchAsync(@event!, cancellationToken);
+                await _eventDispatcher.DispatchAsync((IDomainEvent)@event!, cancellationToken);
 
                 message.WasSent = true;
                 
@@ -54,7 +61,7 @@ public class OutboxProcessor : IOutboxProcessor
                 message.FirstFailedOnUtc = DateTime.UtcNow;
                 
                 await _exponentialBackoffService.RetryWithBackoff(
-                    () => _eventDispatcher.DispatchAsync(@event!, cancellationToken),
+                    () => _eventDispatcher.DispatchAsync((IDomainEvent)@event!, cancellationToken),
                     new BackOffOptions(3, 100, 5000, 2),
                     onComplete: (ex) => MarkAsFailedAsync(ex,message),
                     cancellationToken:cancellationToken);
