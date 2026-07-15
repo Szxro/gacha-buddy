@@ -1,4 +1,6 @@
 ﻿using Account.Application.Common.Pipelines;
+using Account.Application.Common.Resolvers;
+using Account.Application.Contracts;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +29,9 @@ public static class ApplicationServiceRegistration
             options.AddOpenBehavior(typeof(RequestPerformancePipelineBehavior<,>));
             options.AddOpenBehavior(typeof(RequestExceptionHandlingPipelineBehavior<,>));
         });
+        
+        // Resolvers
+        services.AddScoped<IEventTypeResolver, EventTypeResolver>();
         
         return services;
     }
