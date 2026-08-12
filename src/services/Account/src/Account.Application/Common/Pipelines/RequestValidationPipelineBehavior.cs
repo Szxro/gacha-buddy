@@ -24,7 +24,7 @@ public class RequestValidationPipelineBehavior<TRequest, TResponse>
 
         if (failures.Length <= 0)
         {
-            return await next();
+            return await next(cancellationToken);
         }
 
         if (typeof(TResponse).IsGenericType

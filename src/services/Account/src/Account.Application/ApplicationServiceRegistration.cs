@@ -1,6 +1,8 @@
 ﻿using Account.Application.Common.Pipelines;
 using Account.Application.Common.Resolvers;
 using Account.Application.Contracts;
+using Account.Application.EventHandlers;
+using Account.Domain.Events;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,14 +26,19 @@ public static class ApplicationServiceRegistration
             options.RegisterServicesFromAssembly(typeof(ApplicationServiceRegistration).Assembly);
             
             // Pipelines
-            options.AddOpenBehavior(typeof(RequestValidationPipelineBehavior<,>));
+            options.AddOpenBehavior(typeof(RequestExceptionHandlingPipelineBehavior<,>));
             options.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
             options.AddOpenBehavior(typeof(RequestPerformancePipelineBehavior<,>));
-            options.AddOpenBehavior(typeof(RequestExceptionHandlingPipelineBehavior<,>));
+            options.AddOpenBehavior(typeof(RequestValidationPipelineBehavior<,>));
+            options.AddOpenBehavior(typeof(RequestTransactionPipelineBehavior<,>));
+            options.AddOpenBehavior(typeof(RequestAuditLogPipelineBehavior<,>));
         });
         
         // Resolvers
         services.AddScoped<IEventTypeResolver, EventTypeResolver>();
+        
+        // Events handlers 
+        services.AddTransient<IEventHandler<WelcomeEvent>, WelcomeEventHandler>();
         
         return services;
     }

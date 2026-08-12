@@ -5,8 +5,12 @@
   </PropertyGroup>
   <ItemGroup>
     <!--Microsoft-->
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.1" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
     <PackageVersion Include="MediatR" Version="14.1.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.29" />
     <PackageVersion Include="Microsoft.AspNetCore.Hosting" Version="2.3.10" />
+    <PackageVersion Include="Microsoft.AspNetCore.RateLimiting" Version="7.0.0-rc.2.22476.2" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.27" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.27" />
@@ -14,8 +18,6 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <!--DotNetEnv-->
     <PackageVersion Include="DotNetEnv" Version="3.2.0" />
-    <!--Swashbuckle-->
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <!--Ef core extensions-->
     <PackageVersion Include="EFCore.NamingConventions" Version="8.0.3" />
     <!--NUnit-->
@@ -25,5 +27,14 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <!--Fluent Validation-->
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <!--Serilog-->
+    <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="Serilog.Formatting.Compact" Version="3.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="8.0.0-nblumhardt-02322" />
+    <!--Swagger-->
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.4" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.1.4" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.4" />
   </ItemGroup>
 </Project>

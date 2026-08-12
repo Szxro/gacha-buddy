@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 using Account.Domain.Common;
 
 namespace Account.Domain.Entities;
@@ -8,11 +10,23 @@ public class AuditLog : Entity
 
     public User? User { get; set; }
 
-    public string Action { get; set; } = string.Empty;
+    public string RequestName { get; set; } = null!; // CommandName, QueryName
 
-    public string IpAddress { get; set; } = string.Empty;
+    public string? RequestData { get; set; } // Payload
 
-    public string UserAgent { get; set; } = string.Empty; // refer to the device that the user used
+    public string? ResourceName { get; set; } // refer to the entity (User)
+    
+    public string? ResourceId { get; set; }  // id of the entity
 
-    public DateTime CreatedAt { get; set; }
+    public string IpAddress { get; init; } = string.Empty;
+
+    public string UserAgent { get; init; } = string.Empty; // refer to the device that the user used
+    
+    public bool IsSuccessful { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    public long? ExecutionTimeInMs { get; set; }
+    
+    public DateTime CreatedAt { get; init; }
 }

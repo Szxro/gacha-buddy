@@ -34,7 +34,7 @@ public class RequestPerformancePipelineBehavior<TRequest, TResponse>
             long elapsedTime = stopwatch.ElapsedMilliseconds;
 
             _logger.LogInformation(
-                "The current request {requestName} completed in {elapsedTime}ms",
+                "The current request {RequestName} completed in {ElapsedTime}ms",
                 requestName, elapsedTime);
         }
     }

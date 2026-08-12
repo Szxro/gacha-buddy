@@ -1,12 +1,15 @@
-﻿using Account.Domain.Common;
+﻿using System.Data;
+using Account.Application.Common.Abstractions;
+using Account.Domain.Common;
 using Account.Domain.Entities;
 using Account.Infrastructure.Extensions;
 using Account.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Account.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IAppDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -45,4 +48,11 @@ public class AppDbContext : DbContext
     public DbSet<EmailCode> EmailCode => Set<EmailCode>();
 
     public DbSet<OutboxMessage> OutboxMessage => Set<OutboxMessage>();
+    
+    public async Task<IDbTransaction> GetDbTransaction(CancellationToken cancellationToken = default)
+    {
+        IDbContextTransaction transaction = await Database.BeginTransactionAsync(cancellationToken);
+        
+        return transaction.GetDbTransaction();
+    }
 }

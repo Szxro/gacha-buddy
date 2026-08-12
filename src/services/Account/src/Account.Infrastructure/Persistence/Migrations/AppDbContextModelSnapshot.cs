@@ -31,19 +31,43 @@ namespace Account.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("action");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("error_message");
+
+                    b.Property<long?>("ExecutionTimeInMs")
+                        .HasColumnType("bigint")
+                        .HasColumnName("execution_time_in_ms");
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ip_address");
+
+                    b.Property<bool>("IsSuccessful")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_successful");
+
+                    b.Property<string>("RequestData")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("request_data");
+
+                    b.Property<string>("RequestName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("request_name");
+
+                    b.Property<string>("ResourceId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("resource_id");
+
+                    b.Property<string>("ResourceName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("resource_name");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()

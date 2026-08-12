@@ -1,7 +1,5 @@
 using Account.Application.Contracts;
 using Account.Infrastructure.Common;
-using Account.Infrastructure.Common.Attributes;
-using Account.Infrastructure.Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +8,7 @@ namespace Account.Infrastructure.Outbox;
 public class OutboxProcessorWorker : BaseWorker<OutboxProcessorWorker>
 {
     // Get the expiration time or timeout from configuration?
-    private static readonly TimeSpan Interval = TimeSpan.FromMinutes(5);
+    private static readonly TimeSpan Interval = TimeSpan.FromMinutes(2);
     
     private readonly IServiceScopeFactory _serviceScopeFactory;
     
@@ -26,9 +24,9 @@ public class OutboxProcessorWorker : BaseWorker<OutboxProcessorWorker>
         using PeriodicTimer periodicTimer = new PeriodicTimer(Interval);
 
         while (await periodicTimer.WaitForNextTickAsync(cancellationToken) 
-               && !cancellationToken.IsCancellationRequested) 
+               && !cancellationToken.IsCancellationRequested)
         {
-            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            await using AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope();
             
             IOutboxProcessor processor = scope.ServiceProvider.GetRequiredService<IOutboxProcessor>();
             

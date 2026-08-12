@@ -24,12 +24,10 @@ public class RequestExceptionHandlingPipelineBehavior<TRequest, TResponse>
         }
         catch (Exception ex)
         {
-            string requestName = typeof(TRequest).Name;
-
-            _logger.LogInformation(
-                "An unhandled error occurred while trying to completed the request {requestName} with the error message: {message}",
-                requestName,
-                ex.Message);
+            _logger.LogError(
+                ex,
+                "An unhandled error occurred while trying to completed the request {RequestName}.",
+                typeof(TRequest).Name);
 
             throw;
         }

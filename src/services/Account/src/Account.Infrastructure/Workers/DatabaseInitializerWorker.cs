@@ -18,7 +18,7 @@ public class DatabaseInitializerWorker : BaseWorker<DatabaseInitializerWorker>
 
     public override async Task RunAsync(CancellationToken cancellationToken)
     {
-        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        await using AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope();
 
         IDatabaseInitializerService initializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializerService>();
         
