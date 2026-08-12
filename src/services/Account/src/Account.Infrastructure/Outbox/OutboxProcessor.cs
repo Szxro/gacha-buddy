@@ -39,6 +39,8 @@ public class OutboxProcessor : IOutboxProcessor
             .Take(BatchSize)
             .OrderBy(x => x.OccuredOnUtc)
             .ToListAsync(cancellationToken);
+
+        if (messages.Count <= 0) return messages.Count;
         
         foreach (OutboxMessage message in messages)
         {

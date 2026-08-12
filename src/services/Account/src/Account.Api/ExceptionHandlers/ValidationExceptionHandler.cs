@@ -25,7 +25,8 @@ public class ValidationExceptionHandler : IExceptionHandler
             Title = "Validation Failed",
             Detail = "One or more validation errors occurred.",
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
-            Status = StatusCodes.Status400BadRequest
+            Status = StatusCodes.Status400BadRequest,
+            Instance = httpContext.Request.Path
         };
 
         if (failures is not null)

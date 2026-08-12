@@ -25,29 +25,27 @@ public class RequestLoggingPipelineBehavior<TRequest, TResponse>
     {
         string requestName = typeof(TRequest).Name;
 
-        string? username = _currentUserService.GetCurrentUserName();
-
         _logger.LogInformation(
-            "Processing the request {requestName} requested by the user {user}",
+            "Processing the request {RequestName} requested by the user {User}",
             requestName,
-            username ?? "System");
+            _currentUserService.UserName ?? "System");
 
         TResponse response = await next(cancellationToken);
 
         if (response.IsSuccess)
         {
             _logger.LogInformation(
-                "Completed the request {requestName} requested by the user {user}",
+                "Completed the request {RequestName} requested by the user {User}",
                 requestName,
-                username ?? "System");
+                _currentUserService.UserName ?? "System");
 
             return response;
         }
 
         _logger.LogWarning(
-            "Completed the request {requestName} requested by the user {user} with an error of type {errorName}",
+            "Completed the request {RequestName} requested by the user {User} with an error of type {ErrorName}",
             requestName,
-            username ?? "System",
+            _currentUserService.UserName ?? "System",
             response.Error.ErrorCode);
 
         return response;

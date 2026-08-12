@@ -17,8 +17,25 @@ public class CurrentUserService : ICurrentUserService
         _httpContext = httpContext;
     }
     
-    public string? GetCurrentUserName()
+    public string? UserName 
+        => _httpContext?.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Name)?.Value;
+
+    public int? UserId
     {
-        return _httpContext?.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Name)?.Value;
+        get
+        {
+            string? userIdClaim = _httpContext.HttpContext?.User.Claims
+                .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+            return int.TryParse(userIdClaim, out int userId)
+                ? userId
+                : null;
+        }
     }
+
+    public string IpAddress =>
+        _httpContext?.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+    public string UserAgent => 
+        _httpContext?.HttpContext?.Request.Headers.UserAgent.ToString() ??  "unknown";
 }
