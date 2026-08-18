@@ -9,21 +9,23 @@ namespace Account.Infrastructure.Services;
 [Inject(ServiceKind.Service,ServiceLifetime.Singleton)]
 public class InMemoryEventHandler : IEventDispatcher
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public InMemoryEventHandler(IServiceProvider serviceProvider)
+    public InMemoryEventHandler(IServiceScopeFactory serviceScopeFactory)
     {
-        _serviceProvider = serviceProvider;
+        _serviceScopeFactory = serviceScopeFactory;
     }
     
     public async Task DispatchAsync(IDomainEvent @event, CancellationToken cancellationToken = default)
     {
+        await using AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope();
+        
         // Getting the handler type base on the event type
         Type handlerType = typeof(IEventHandler<>) // IEventHandler<EVENT_NAME>
             .MakeGenericType(@event.GetType());
 
         // Getting handlers register in the di pool base on the handler type
-        var handlers = _serviceProvider.GetServices(handlerType);
+        var handlers = scope.ServiceProvider.GetServices(handlerType);
 
         foreach (var handler in handlers)
         { 
