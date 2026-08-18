@@ -58,13 +58,16 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
 {
     private readonly IUserRepository _userRepository;
     private readonly IHashService _hashService;
+    private readonly IEmailService _emailService;
 
     public CreateUserCommandHandler(
         IUserRepository userRepository, 
-        IHashService hashService)
+        IHashService hashService,
+        IEmailService emailService)
     {
         _userRepository = userRepository;
         _hashService = hashService;
+        _emailService = emailService;
     }
     
     public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -96,9 +99,13 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
             IsActive = true
         });
         
-        // TODO: GENERATE EMAIL CODE AND WITH AN DOMAIN EVENT SEND IT 
+        newUser.EmailCodes.Add(new EmailCode
+        {
+            Code = _emailService.GenerateCode(),
+            ExpiredAt = DateTime.UtcNow.AddMinutes(5)
+        });
         
-        newUser.AddEvent(new WelcomeEvent{Username =  request.UserName});
+        newUser.AddEvent(new EmailConfirmationEvent{ Email = request.Email, Username = request.UserName, Code = newUser.EmailCodes.First().Code});
         
         _userRepository.Add(newUser);
         
