@@ -8,9 +8,10 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Abstractions;
 using MimeKit;
 
-namespace Account.Infrastructure.Messaging;
+namespace Account.Infrastructure.Messaging.Email;
 
 [Inject(serviceKind:ServiceKind.Service, ServiceLifetime.Scoped)]
 public class EmailService : IEmailService
@@ -90,11 +91,44 @@ public class EmailService : IEmailService
 
         mimeMessage.Subject = emailMessage.Subject;
 
-        mimeMessage.From.Add(MailboxAddress.Parse(emailMessage.ToAddress));
+        mimeMessage.From.Add(MailboxAddress.Parse(_smtpOptions.FromAddress));
 
         mimeMessage.To.Add(MailboxAddress.Parse(emailMessage.ToAddress));
 
-        mimeMessage.Body = new TextPart("html") { Text = emailMessage.Body };
+        BodyBuilder builder = new BodyBuilder { HtmlBody = emailMessage.Body };
+        
+        // Add the logo always if the template required it
+        string assemblyPath = Path.GetDirectoryName(
+            typeof(EmailTemplateRenderer).Assembly.Location)!;
+        
+        string logoPath = Path.Combine(
+            assemblyPath,
+            "Messaging",
+            "Email",
+            "Templates",
+            "logo.png");
+        
+        // TODO: Add the logo to he template if its required
+        if (File.Exists(logoPath) && emailMessage.Body.Contains("cid:logoCid"))
+        {
+            MimeEntity image = builder.LinkedResources.Add(logoPath);
+            image.ContentId = "logoCid";
+            image.ContentDisposition = new ContentDisposition(ContentDisposition.Inline);
+        }
+        
+        // Logic to add the attachments to the email
+        if (emailMessage.Attachments is not null &&  emailMessage.Attachments.Any())
+        {
+            foreach (EmailAttachment attachment in emailMessage.Attachments)
+            {
+                builder.Attachments.Add(
+                    attachment.FileName, 
+                    attachment.Content,
+                    ContentType.Parse(attachment.ContentType));
+            }
+        }
+        
+        mimeMessage.Body = builder.ToMessageBody();
 
         return mimeMessage;
     }
