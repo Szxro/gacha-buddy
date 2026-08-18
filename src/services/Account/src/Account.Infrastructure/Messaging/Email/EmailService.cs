@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace Account.Infrastructure.Services;
+namespace Account.Infrastructure.Messaging;
 
 [Inject(serviceKind:ServiceKind.Service, ServiceLifetime.Scoped)]
 public class EmailService : IEmailService
