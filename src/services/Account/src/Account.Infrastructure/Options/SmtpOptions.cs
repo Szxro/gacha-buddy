@@ -12,7 +12,7 @@ public class SmtpOptions : IOptionsModel
 
     public string Host { get; set; } = string.Empty;
     
-    public string Port { get; set; } = string.Empty;
+    public int Port { get; set; }
     
     public string Username { get; set; } = string.Empty;
     
@@ -43,7 +43,7 @@ public class SmtpOptionsConfigurator : BaseOptions<SmtpOptions>
         string? fromAddress = Environment.GetEnvironmentVariable("SMTP_FROM_ADDRESS");
         
         options.Host = host ?? string.Empty;
-        options.Port = port ?? string.Empty;
+        options.Port = int.TryParse(port, out int portNumber)  ? portNumber : 0;
         options.Username = username ?? string.Empty;
         options.Password = password ?? string.Empty;
         options.FromAddress = fromAddress ?? string.Empty;
@@ -64,14 +64,6 @@ public class SmtpOptionsValidator : AbstractValidator<SmtpOptions>
             .Must(BeValidPort)
             .WithMessage("SMTP port must be a valid port number.");
 
-        RuleFor(x => x.Username)
-            .NotEmpty()
-            .WithMessage("SMTP username is required.");
-
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .WithMessage("SMTP password is required.");
-
         RuleFor(x => x.FromAddress)
             .NotEmpty()
             .WithMessage("SMTP from address is required.")
@@ -79,8 +71,5 @@ public class SmtpOptionsValidator : AbstractValidator<SmtpOptions>
             .WithMessage("SMTP from address must be a valid email address.");
     }
 
-    private static bool BeValidPort(string port)
-    {
-        return int.TryParse(port, out int portNumber) && portNumber is >= 1 and <= 65535;
-    }
+    private static bool BeValidPort(int portNumber) => portNumber is >= 1 and <= 65535;
 }
