@@ -38,7 +38,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IEventTypeResolver, EventTypeResolver>();
         
         // Events handlers 
-        services.AddTransient<IEventHandler<WelcomeEvent>, WelcomeEventHandler>();
+        services.AddTransient<IEventHandler<EmailConfirmationEvent>, EmailConfirmationEventHandler>();
         
         return services;
     }
