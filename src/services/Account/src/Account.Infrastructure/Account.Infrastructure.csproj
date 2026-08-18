@@ -8,11 +8,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Account.Application\Account.Application.csproj" />
+        <Content Include="Messaging/Email/Templates/**/*.html">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="EFCore.NamingConventions" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+      <PackageReference Include="MailKit" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
       <PackageReference Include="Microsoft.AspNetCore.Hosting" />
       <PackageReference Include="Microsoft.EntityFrameworkCore"/>
